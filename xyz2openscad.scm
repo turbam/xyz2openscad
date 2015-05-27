@@ -3,7 +3,7 @@
 ;;;
 ;;;GNU Guile script
 ;;;Author: Konstantin Prosenz
-;;;Usage: guile xyz2openscad <path-to-.xyz-file>
+;;;Usage: guile xyz2openscad.scm <path-to-.xyz-file>
 ;;;
 
 (use-modules (srfi srfi-1)
@@ -86,7 +86,7 @@ not data available, this script will assume a radius of 1
 (Angstroem) and color the corresponding atom red in the rendered
 3D model.
 
-Usage: guile xyz2openscad <path-to-.xyz-file>
+Usage: guile xyz2openscad.scm <path-to-.xyz-file>
 
 You can also make this script executable with chmod.~%~%"))
 
