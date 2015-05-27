@@ -78,13 +78,13 @@ not already do so.~%" path)
 
 (define help-message (format #f
                              "~%Converts a (orca) .xyz molecule coordinate file
-to an openscad source file from which a 3D modell
+to an openscad source file from which a 3D model
 can be rendered. The openscad source file will be printed
 to standard output.
 Should there be an atom in the .xyz for which there is
 not data available, this script will assume a radius of 1
 (Angstroem) and color the corresponding atom red in the rendered
-3D modell.
+3D model.
 
 Usage: guile xyz2openscad <path-to-.xyz-file>
 
