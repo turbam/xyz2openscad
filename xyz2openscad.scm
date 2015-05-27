@@ -76,14 +76,8 @@ not already do so.~%" path)
                (proc (cdr line-list))))))))
 
 
-
-(cond ((or 
-        (member "-h" (command-line))
-        (member "--help" (command-line))
-        (member "?" (command-line))
-        (< 2 (length (command-line))))
-       (format #t
-               "~%Converts a (orca) .xyz molecule coordinate file
+(define help-message (format #f
+                             "~%Converts a (orca) .xyz molecule coordinate file
 to an openscad source file from which a 3D modell
 can be rendered. The openscad source file will be printed
 to standard output.
@@ -96,10 +90,19 @@ Usage: guile xyz2openscad <path-to-.xyz-file>
 
 You can also make this script executable with chmod.~%~%"))
 
+(cond ((or 
+        (member "-h" (command-line))
+        (member "--help" (command-line))
+        (member "?" (command-line))
+        (< 2 (length (command-line))))
+       (format #t
+               help-message))
+      
       ((and (= 2 (length (command-line)))
-(check-file (cadr (command-line))))
-(with-input-from-file (cadr (command-line))
-  (lambda () (write-open-scad-script (read-xyz)))))
-((= 1 (length (command-line)))
- (write-open-scad-script (read-xyz))))
+            (check-file (cadr (command-line))))
+       (with-input-from-file (cadr (command-line))
+         (lambda () (write-open-scad-script (read-xyz)))))
+      ((= 1 (length (command-line)))
+       (write-open-scad-script (read-xyz))))
+
 
