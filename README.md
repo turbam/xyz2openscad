@@ -29,5 +29,7 @@ result into the GNU Guile script, which generates an open-scad script
 and saves it as "molecule.scad".
 
 For the .xyz file specifications visit
+
 http://en.wikipedia.org/wiki/XYZ_file_format
+
 (the script essentially ignores the first two lines of input).
