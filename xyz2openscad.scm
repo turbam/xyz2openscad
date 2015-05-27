@@ -28,26 +28,27 @@
                            (car atom-and-radius)))
                  atom-list)))
 
-(define (read-xyz-file path)
-  (cond
-   ((not (file-exists? path))
-    (format #t
-            "File \"~a\" does not exist.
+(define (check-file path)
+  (if (file-exists? path)
+      #t
+      (begin
+        (format #t
+                "File \"~a\" does not exist.
 Try using the absolute path in case you did
-not already do so.~%" path) (quit))
-   (else
-    (with-input-from-file path
-      (lambda ()
-        (read-line)
-        (read-line)
-        (let rec ((line (read-line)))
-          (cond ((eof-object? line) '())
-                (else
-                 (cons (remove (lambda (a) (string=? a ""))
-                               (string-split line
-                                             (lambda (c) (or (char=? c #\Space)
-                                                             (char=? c #\Tab)))))
-                       (rec (read-line)))))))))))
+not already do so.~%" path)
+        (quit))))
+
+(define (read-xyz)
+  (read-line)
+  (read-line)
+  (let rec ((line (read-line)))
+    (cond ((eof-object? line) '())
+          (else
+           (cons (remove (lambda (a) (string=? a ""))
+                         (string-split line
+                                       (lambda (c) (or (char=? c #\Space)
+                                                       (char=? c #\Tab)))))
+                 (rec (read-line)))))))
 
 (define (write-open-scad-script xyz-lines)
   (format #t "scale=1;~%~%")
@@ -74,16 +75,15 @@ not already do so.~%" path) (quit))
                       (format #t "sphere(~a*scale);};~%" 1.0)))
                (proc (cdr line-list))))))))
 
-(if (and (= 2 (length (command-line)))
-         (not (string=? (cadr (command-line))
-                        "-h"))
-         (not (string=? (cadr (command-line))
-                        "?"))
-         (not (string=? (cadr (command-line))
-                        "--help")))
-    (write-open-scad-script (read-xyz-file (cadr (command-line))))
-    (format #t
-            "~%Converts a (orca) .xyz molecule coordinate file
+
+
+(cond ((or 
+        (member "-h" (command-line))
+        (member "--help" (command-line))
+        (member "?" (command-line))
+        (< 2 (length (command-line))))
+       (format #t
+               "~%Converts a (orca) .xyz molecule coordinate file
 to an openscad source file from which a 3D modell
 can be rendered. The openscad source file will be printed
 to standard output.
@@ -95,3 +95,11 @@ not data available, this script will assume a radius of 1
 Usage: guile xyz2openscad <path-to-.xyz-file>
 
 You can also make this script executable with chmod.~%~%"))
+
+      ((and (= 2 (length (command-line)))
+(check-file (cadr (command-line))))
+(with-input-from-file (cadr (command-line))
+  (lambda () (write-open-scad-script (read-xyz)))))
+((= 1 (length (command-line)))
+ (write-open-scad-script (read-xyz))))
+
