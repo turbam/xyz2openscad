@@ -69,19 +69,18 @@ not already do so.~%" path) (quit))
                               (get-vdw-radius current-atom)))
                      (else
                       (format #t "// atom ~a not found, assuming r=1.0~%"
-                              (car current-line))
+                              current-atom)
                       (format #t "color(\"red\")~%")
                       (format #t "sphere(~a*scale);};~%" 1.0)))
-               
                (proc (cdr line-list))))))))
 
 (if (and (= 2 (length (command-line)))
-        (not (string=? (cadr (command-line))
-                       "-h"))
-        (not (string=? (cadr (command-line))
-                       "?"))
-        (not (string=? (cadr (command-line))
-                       "--help")))
+         (not (string=? (cadr (command-line))
+                        "-h"))
+         (not (string=? (cadr (command-line))
+                        "?"))
+         (not (string=? (cadr (command-line))
+                        "--help")))
     (write-open-scad-script (read-xyz-file (cadr (command-line))))
     (format #t
             "~%Converts a (orca) .xyz molecule coordinate file
