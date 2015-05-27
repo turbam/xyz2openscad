@@ -12,6 +12,8 @@ or
 
 `./xyz2openscad <input-file> > <output-file>`
 
+(you need to make the script executable via chmod first of course)
+
 This scripts supports piping the xyz file into it, which
 makes it easy to use with open-babel.
 
@@ -39,7 +41,7 @@ http://en.wikipedia.org/wiki/XYZ_file_format
 
 The van der Waals radii of the atoms were taken from the web, so no
 guarantee there. These can be expanded and/or changed easily, just
-look at the script and the rest should be self-explaining.
+take a look at the script and the rest should be self-explaining.
 
 Should the .xyz-file contain an atomtype for which the script contains no
 data, a van der Waals radius of 1 Angstroem will be assumed. The atom will
