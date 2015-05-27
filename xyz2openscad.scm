@@ -10,6 +10,24 @@
              (ice-9 rdelim)
              (ice-9 format))
 
+(define atom-list
+  (list
+   '("H" 1.20)
+   '("C" 1.70)
+   '("N" 1.55)
+   '("O" 1.52)
+   '("F" 1.47)
+   '("P" 1.80)
+   '("S" 1.80)
+   '("Cl" 1.89)
+   '("Ru" 1.45)))
+
+(define (get-vdw-radius atom)
+  (cadar (filter (lambda (atom-and-radius)
+                 (string=? atom
+                           (car atom-and-radius)))
+                 atom-list)))
+
 (define (read-xyz-file path)
   (cond
    ((not (file-exists? path))
@@ -27,45 +45,35 @@ not already do so.~%" path) (quit))
                 (else
                  (cons (remove (lambda (a) (string=? a ""))
                                (string-split line
-                                             (lambda (c) (char=? c #\Space))))
+                                             (lambda (c) (or (char=? c #\Space)
+                                                             (char=? c #\Tab)))))
                        (rec (read-line)))))))))))
-   
-(define atom-list
-  (list
-   '("H" 1.20)
-   '("C" 1.70)
-   '("N" 1.55)
-   '("O" 1.52)
-   '("F" 1.47)
-   '("P" 1.80)
-   '("S" 1.80)
-   '("Cl" 1.89)
-   '("Ru" 1.45)))
 
 (define (write-open-scad-script xyz-lines)
-  (format #t "i=1;~%")
-  (let proc ((line-list xyz-lines))
-    (cond ((null? line-list))
-          (else
-           (let ((current-line (car line-list)))
-             (format #t "translate([~a*i,~a*i,~a*i]){~%"
-                     (list-ref current-line 1)
-                     (list-ref current-line 2)
-                     (list-ref current-line 3))
-             (cond ((member (car current-line)
-                            (map (lambda (atom-and-radius) (car atom-and-radius))
-                                 atom-list))
-                    (format #t "sphere(~a*i);};~%"
-                            (cadar (filter (lambda (i)
-                                             (string=? (car i) (car current-line)))
-                                           atom-list))))
-                   (else
-                    (format #t "// atom ~a not found, assuming r=1.0~%"
-                            (car current-line))
-                    (format #t "color(\"red\")~%")
-                    (format #t "sphere(~a*i);};~%" 1.0)))
-
-             (proc (cdr line-list)))))))
+  (format #t "scale=1;~%~%")
+  (let ((valid-atoms (map (lambda (atom-and-radius) (car atom-and-radius))
+                          atom-list)))
+    (let proc ((line-list xyz-lines))
+      (cond ((null? line-list))
+            (else
+             (let* ((current-line (car line-list))
+                    (current-atom (car current-line)))
+               (format #t "translate([~a*scale,~a*scale,~a*scale]){~%"
+                       ;;get the x,y,z coordinates
+                       (list-ref current-line 1)
+                       (list-ref current-line 2)
+                       (list-ref current-line 3))
+               (cond ((member current-atom
+                              valid-atoms)
+                      (format #t "sphere(~a*scale);};~%"
+                              (get-vdw-radius current-atom)))
+                     (else
+                      (format #t "// atom ~a not found, assuming r=1.0~%"
+                              (car current-line))
+                      (format #t "color(\"red\")~%")
+                      (format #t "sphere(~a*scale);};~%" 1.0)))
+               
+               (proc (cdr line-list))))))))
 
 (if (and (= 2 (length (command-line)))
         (not (string=? (cadr (command-line))
@@ -79,5 +87,12 @@ not already do so.~%" path) (quit))
             "~%Converts a (orca) .xyz molecule coordinate file
 to an openscad source file from which a 3D modell
 can be rendered. The openscad source file will be printed
-to standard output.~%
-Usage: guile xyz2openscad <path-to-.xyz-file>~%~%"))
+to standard output.
+Should there be an atom in the .xyz for which there is
+not data available, this script will assume a radius of 1
+(Angstroem) and color the corresponding atom red in the rendered
+3D modell.
+
+Usage: guile xyz2openscad <path-to-.xyz-file>
+
+You can also make this script executable with chmod.~%~%"))
