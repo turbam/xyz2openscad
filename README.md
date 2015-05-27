@@ -33,3 +33,16 @@ For the .xyz file specifications visit
 http://en.wikipedia.org/wiki/XYZ_file_format
 
 (the script essentially ignores the first two lines of input).
+
+
+##More information
+
+The van der Waals radii of the atoms were taken from the web, so no
+guarantee there. These can be expanded and/or changed easily, just
+look at the script and the rest should be self-explaining.
+
+Should the .xyz-file contain an atomtype for which the script contains no
+data, a van der Waals radius of 1 Angstroem will be assumed. The atom will
+also be colored red in the resulting open-scad script and there will
+be a comment explaining things at the right location in the open-scad
+script.
