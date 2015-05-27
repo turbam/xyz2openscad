@@ -6,11 +6,11 @@ models from .xyz files.
 The script will print the open-scad source file to std-out.
 
 ##Usage
-`guile xyz2openscad <input-file> > <output-file>`
+`guile xyz2openscad.scm <input-file> > <output-file>`
 
 or
 
-`./xyz2openscad <input-file> > <output-file>`
+`./xyz2openscad.scm <input-file> > <output-file>`
 
 (you need to make the script executable via chmod first of course)
 
