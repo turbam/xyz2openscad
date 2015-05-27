@@ -36,6 +36,8 @@ http://en.wikipedia.org/wiki/XYZ_file_format
 
 (the script essentially ignores the first two lines of input).
 
+##Requirements
+This script has been tested with GNU Guile 2.0.11.
 
 ##More information
 
