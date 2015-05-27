@@ -1,5 +1,21 @@
-to convert from smiles string to xyz use
+A GNU Guile script for generating open-scad molecule
+models from .xyz files.
+The script will print the open-scad source file to std-out.
 
-obabel molecule.smi -O molecule.xyz --gen3d
+Usage: guile xyz2openscad <input-file> > <output-file>
+or     ./xyz2openscad <input-file> > <output-file>
 
-where molecule.smi contains the smiles string.
+This scripts supports piping the xyz file into it, which
+makes it easy to use with open-babel.
+
+The following example assumes you have a file called
+"molecule.smi" which contains a smiles string for a molecule.
+
+    obabel molecule.smi -o xyz --gen3d | guile xyz2openscad.scm > molecule.scad
+or
+    obabel molecule.smi -o xyz --gen3d | ./xyz2openscad.scm > molecule.scad
+
+converts the smiles string to an xyz-file via open-babel, pipes the
+result into the GNU Guile script, which generates an open-scad script
+and saves it as "molecule.scad".
+
