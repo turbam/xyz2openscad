@@ -1,0 +1,5 @@
+to convert from smiles string to xyz use
+
+obabel molecule.smi -O molecule.xyz --gen3d
+
+where molecule.smi contains the smiles string.
