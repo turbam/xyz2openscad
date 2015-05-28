@@ -1,5 +1,7 @@
 #xyz2openscad
 
+![alt tag](triphenylphosphane.png)
+
 ##Description
 A GNU Guile script for generating 3D open-scad molecule
 models from .xyz files.
