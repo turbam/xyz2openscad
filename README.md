@@ -1,13 +1,13 @@
-#xyz2openscad
+# xyz2openscad
 
 ![alt tag](triphenylphosphane.png)
 
-##Description
+## Description
 A GNU Guile script for generating 3D open-scad molecule
 models from .xyz files.
 The script will print the open-scad source file to std-out.
 
-##Usage
+## Usage
 `guile xyz2openscad.scm <input-file> > <output-file>`
 
 or
@@ -15,6 +15,8 @@ or
 `./xyz2openscad.scm <input-file> > <output-file>`
 
 (you need to make the script executable via chmod first of course)
+
+## open-babel and SMILES-Strings
 
 This scripts supports piping the xyz file into it, which
 makes it easy to use with open-babel.
@@ -38,10 +40,10 @@ http://en.wikipedia.org/wiki/XYZ_file_format
 
 (the script essentially ignores the first two lines of input).
 
-##Requirements
+## Requirements
 This script has been tested with GNU Guile 2.0.11.
 
-##More information
+## Van der Waals radii and missing atoms
 
 The van der Waals radii of the atoms were taken from the web, so no
 guarantee there. These can be expanded and/or changed easily, just
